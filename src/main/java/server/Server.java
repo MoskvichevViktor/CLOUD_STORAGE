@@ -1,5 +1,6 @@
 package server;
 
+import client.AuthService;
 import handlers.MessageHandler;
 
 import java.io.IOException;
@@ -55,7 +56,14 @@ public class Server {
     private void accept(ServerSocketChannel server) throws IOException {
         //новый клиент
         SocketChannel channel = server.accept();
+
+
+        //AuthService.connect();
         System.out.println("Client connected. IP:" + channel.getLocalAddress());
+        //AuthService.connect();
+        //тест подключения к бд
+        //System.out.println("result from bd: " + AuthService.getLoginByLoginAndPass("noname", "xxx"));
+
 
         //неблокирующий режим
         channel.configureBlocking(false);

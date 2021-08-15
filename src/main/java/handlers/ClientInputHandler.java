@@ -10,13 +10,18 @@ public class ClientInputHandler {
         return scanner.next();
     }
 
+
+
+
     public static String getChoice(){
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("Список файлов на сервере - 1\n" +
+        System.out.println(
+                "Список файлов на сервере - 1\n" +
                 "Загрузить файл - 2\n" +
                 "Удалить файл - 3\n" +
-                "Скачать файл -4\n");
+                "Скачать файл -4\n" +
+                "Выйти - exit");
 
         return scanner.next();
     }

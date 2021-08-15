@@ -3,6 +3,7 @@ package client;
 import handlers.ClientInputHandler;
 import handlers.MessageHandler;
 
+import javax.xml.bind.SchemaOutputResolver;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
@@ -31,6 +32,8 @@ public class Client {
 
 
         while (true) {
+
+
             selector.select();
 
             Iterator<SelectionKey> keys = selector.selectedKeys().iterator();
@@ -82,6 +85,15 @@ public class Client {
                 fileManager.downloadFileRequest(userCatalog + fileName);
                 client.register(selector, SelectionKey.OP_READ);
             */
+
+            case ("exit") :
+                try {
+                    client.close();
+                    System.out.println("Client вышел");
+                    System.exit(0);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             default :
                 System.out.println("");
         }
@@ -112,7 +124,14 @@ public class Client {
 
     public static void main(String[] args) {
         try {
-            new Client("localhost", 8090).start();
+            while (true) {
+                AuthService.connect();
+                if (AuthService.getLoginByLoginAndPass(AuthService.getLogin(), AuthService.getPassword()) != null) {
+                    new Client("localhost", 8090).start();
+                } else System.out.println("Client не авторизован");
+                AuthService.disconnect();
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
