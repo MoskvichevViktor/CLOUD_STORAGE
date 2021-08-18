@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.*;
+import java.nio.file.Path;
+import java.nio.file.attribute.UserPrincipal;
 import java.util.Iterator;
 
 public class Client {
@@ -30,9 +32,7 @@ public class Client {
 
         client.register(selector, SelectionKey.OP_CONNECT);
 
-
         while (true) {
-
 
             selector.select();
 
@@ -70,21 +70,30 @@ public class Client {
 
         ClientFileManager fileManager = new ClientFileManager(client, buffer);
 
+
         switch (choice){
-            case ("1") :
+            case "1" :
                 fileManager.filesListRequest(userCatalog);
                 client.register(selector, SelectionKey.OP_READ);
+                break;
 
-            case ("2") :
+            case "2" :
                 String fileName = ClientInputHandler.getFilename();
                 fileManager.uploadFile(userCatalog, fileName);
                 client.register(selector, SelectionKey.OP_WRITE);
+                break;
 
-            /*case ("4") :
-                String fileName = ClientInputHandler.getFilename();
+            case "3" :
+                fileName = ClientInputHandler.getFilename();
+                fileManager.deleteFileRequest(userCatalog + fileName);
+                client.register(selector, SelectionKey.OP_WRITE);
+                break;
+
+            case "4" :
+                fileName = ClientInputHandler.getFilename();
                 fileManager.downloadFileRequest(userCatalog + fileName);
                 client.register(selector, SelectionKey.OP_READ);
-            */
+                break;
 
             case ("exit") :
                 try {
@@ -123,11 +132,12 @@ public class Client {
     }
 
     public static void main(String[] args) {
+
         try {
             while (true) {
                 AuthService.connect();
-                if (AuthService.getLoginByLoginAndPass(AuthService.getLogin(), AuthService.getPassword()) != null) {
-                    new Client("localhost", 8090).start();
+                if (AuthService.getLoginByLoginAndPass(ClientInputHandler.getLogin(), ClientInputHandler.getPassword()) != null) {
+                    new Client("localhost", 8091).start();
                 } else System.out.println("Client не авторизован");
                 AuthService.disconnect();
             }
@@ -136,4 +146,5 @@ public class Client {
             e.printStackTrace();
         }
     }
+
 }

@@ -6,7 +6,6 @@ import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class MessageHandler {
     private String header;
 

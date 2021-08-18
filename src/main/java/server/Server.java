@@ -1,6 +1,5 @@
 package server;
 
-import client.AuthService;
 import handlers.MessageHandler;
 
 import java.io.IOException;
@@ -24,7 +23,6 @@ public class Server {
 
         serverSocket.configureBlocking(false);
 
-        //Селектор будет прослушивать новые подключения на сервер
         serverSocket.register(selector, SelectionKey.OP_ACCEPT);
 
         System.out.println("Server started");
@@ -43,9 +41,6 @@ public class Server {
                 if (key.isReadable()) {
                     read(key);
                 }
-                if (key.isWritable()) {
-                    write(key);
-                }
 
                 keys.remove();
             }
@@ -54,21 +49,13 @@ public class Server {
     }
 
     private void accept(ServerSocketChannel server) throws IOException {
-        //новый клиент
+
         SocketChannel channel = server.accept();
 
-
-        //AuthService.connect();
         System.out.println("Client connected. IP:" + channel.getLocalAddress());
-        //AuthService.connect();
-        //тест подключения к бд
-        //System.out.println("result from bd: " + AuthService.getLoginByLoginAndPass("noname", "xxx"));
 
-
-        //неблокирующий режим
         channel.configureBlocking(false);
 
-        //регистрируем канал для чтения
         channel.register(selector, SelectionKey.OP_READ);
     }
 
@@ -88,24 +75,27 @@ public class Server {
         switch (operation){
             case ("write_file") :
                 fileManager.writeFile(filename);
+                break;
             case ("download_file") :
                 fileManager.sendFile(filename);
+                break;
             case ("print_list") :
                 fileManager.sendFilesList(filename);
+                break;
+            case "delete_file":
+                fileManager.deleteFile(filename);
+
         }
 
         client.register(selector, SelectionKey.OP_READ);
     }
 
-    private void write(SelectionKey key) throws IOException {
-
-    }
-
     public static void main(String[] args) {
         try {
-            new Server("localhost", 8090).start();
+            new Server("localhost", 8091).start();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
 }

@@ -10,9 +10,6 @@ public class ClientInputHandler {
         return scanner.next();
     }
 
-
-
-
     public static String getChoice(){
         Scanner scanner = new Scanner(System.in);
 
@@ -25,4 +22,16 @@ public class ClientInputHandler {
 
         return scanner.next();
     }
+
+    public static String getLogin(){
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Введите логин: ");
+        return scanner.next();
+    }
+    public static String getPassword(){
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Введите пароль: ");
+        return scanner.next();
+    }
+
 }

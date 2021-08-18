@@ -77,4 +77,13 @@ public class ServerFileManager {
             e.printStackTrace();
         }
     }
+
+    public void deleteFile(String path){
+        try {
+            Files.deleteIfExists(Paths.get(path));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

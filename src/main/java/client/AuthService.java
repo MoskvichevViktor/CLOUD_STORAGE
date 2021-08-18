@@ -1,8 +1,6 @@
 package client;
 
-
 import java.sql.*;
-import java.util.Scanner;
 
 public class AuthService {
 
@@ -19,17 +17,6 @@ public class AuthService {
           }
      }
 
-     public static String getLogin(){
-          Scanner scanner = new Scanner(System.in);
-          System.out.println("Введите логин: ");
-          return scanner.next();
-     }
-     public static String getPassword(){
-          Scanner scanner = new Scanner(System.in);
-          System.out.println("Введите пароль: ");
-          return scanner.next();
-     }
-
      public static String getLoginByLoginAndPass(String login, String password) {
           String query = String.format("select login from users where login='%s' and password='%s'", login, password);
           try {
@@ -37,8 +24,8 @@ public class AuthService {
 
                if (rs.next()) {
                          return rs.getString("login");
-
                }
+
           }catch (SQLException throwables) {
                throwables.printStackTrace();
           }
@@ -52,5 +39,6 @@ public class AuthService {
                e.printStackTrace();
           }
      }
+
 }
 

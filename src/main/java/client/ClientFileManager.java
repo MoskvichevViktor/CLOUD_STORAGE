@@ -23,11 +23,12 @@ public class ClientFileManager {
             ByteBuffer headerBuffer = ByteBuffer.wrap(("write_file " + userDir + path + "\n").getBytes());
             client.write(headerBuffer);
 
-            while ((channel.read(buffer)) != -1) {
+            while (channel.read(buffer)!= -1) {
                 buffer.flip();
                 client.write(buffer);
-                buffer.clear();
+                buffer.compact();
             }
+            buffer.clear();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -74,6 +75,7 @@ public class ClientFileManager {
                 System.out.println(new String(message));
                 buffer.clear();
             }
+            buffer.clear();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -95,6 +97,16 @@ public class ClientFileManager {
                 buffer.clear();
                 bytes = client.read(buffer);
             }
+            buffer.clear();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteFileRequest(String path){
+        ByteBuffer headerBuffer = ByteBuffer.wrap(("delete_file " + path + "\n").getBytes());
+        try {
+            client.write(headerBuffer);
         } catch (IOException e) {
             e.printStackTrace();
         }
